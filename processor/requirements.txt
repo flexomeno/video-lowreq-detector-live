@@ -1,0 +1,4 @@
+opencv-python
+numpy
+ultralytics==8.1.0 # O la versión que uses para tu modelo Nano
+python-dotenv      # Útil para el desarrollo local
