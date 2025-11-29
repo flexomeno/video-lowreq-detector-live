@@ -1,0 +1,35 @@
+# k8s-manifests/04-deployment-notifier.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegram-notifier
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegram-notifier
+  template:
+    metadata:
+      labels:
+        app: telegram-notifier
+    spec:
+      containers:
+      - name: notifier
+        # Usar la etiqueta de tu imagen construida localmente
+        image: telegram-notifier:latest
+        imagePullPolicy: IfNotPresent
+        
+        # Montar la ubicación para leer los videos creados
+        volumeMounts:
+        - name: video-storage
+          mountPath: /app/videos/inbox # Debe coincidir con MONITOR_DIR en el código Python
+          
+        # Inyectar las credenciales
+        envFrom:
+        - secretRef:
+            name: ml-config-secrets
+            
+      volumes:
+      - name: video-storage
+        persistentVolumeClaim:
+          claimName: video-capture-storage
