@@ -6,10 +6,14 @@ WORKDIR /app
 # Instalar dependencias del sistema para OpenCV
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    libgl1-mesa-glx \
+    # Dependencia genérica de OpenGL que incluye GLX
+    libgl1 \
+    # Dependencias de X11/GUI necesarias para OpenCV
     libsm6 \
     libxext6 \
     libxrender1 \
+    libfontconfig1 \
+    # Herramienta para manejo de video
     ffmpeg && \
     rm -rf /var/lib/apt/lists/*
 
