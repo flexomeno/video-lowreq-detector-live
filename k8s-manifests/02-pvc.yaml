@@ -1,0 +1,12 @@
+# k8s-manifests/02-pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: video-capture-storage
+spec:
+  accessModes:
+    - ReadWriteOnce 
+  storageClassName: local-path # ¡IMPORTANTE! Reemplaza si es necesario
+  resources:
+    requests:
+      storage: 20Gi
