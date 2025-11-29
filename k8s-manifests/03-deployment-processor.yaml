@@ -1,0 +1,44 @@
+# k8s-manifests/03-deployment-processor.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rtsp-processor-cpu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rtsp-processor
+  template:
+    metadata:
+      labels:
+        app: rtsp-processor
+    spec:
+      containers:
+      - name: processor
+        # Usar la etiqueta de tu imagen construida localmente
+        image: rtsp-processor-cpu:latest 
+        imagePullPolicy: IfNotPresent # Evita intentar descargarla si ya existe
+        
+        # Montar la ubicación donde se escribirán los videos
+        volumeMounts:
+        - name: video-storage
+          mountPath: /app/videos
+        
+        # Inyectar las credenciales
+        envFrom:
+        - secretRef:
+            name: ml-config-secrets 
+            
+        # Limitar el uso de CPU para no sobrecargar el nodo
+        resources:
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+          requests:
+            cpu: "1500m" 
+            memory: "3Gi"
+            
+      volumes:
+      - name: video-storage
+        persistentVolumeClaim:
+          claimName: video-capture-storage
