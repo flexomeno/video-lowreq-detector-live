@@ -1,0 +1,2 @@
+python-telegram-bot
+watchdog # Util para monitorear cambios en el directorio
